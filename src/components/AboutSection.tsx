@@ -1,11 +1,8 @@
-
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-
 const AboutSection = () => {
-  return (
-    <section className="section-padding bg-white relative overflow-hidden">
+  return <section className="section-padding bg-white relative overflow-hidden">
       <div className="absolute top-0 left-0 w-64 h-64 bg-tour-orange rounded-full opacity-10 blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
       <div className="absolute bottom-0 right-0 w-64 h-64 bg-tour-orange rounded-full opacity-10 blur-3xl translate-x-1/2 translate-y-1/2"></div>
       
@@ -57,7 +54,7 @@ const AboutSection = () => {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-4">
                 <div className="bg-tour-cream p-6 rounded-lg shadow-md transform hover:-translate-y-1 transition-transform">
-                  <h4 className="text-xl font-bold mb-2">10K+</h4>
+                  <h4 className="text-xl font-bold mb-2">100K+</h4>
                   <p className="text-sm text-gray-600">ผู้ติดตามบนโซเชียลมีเดีย</p>
                 </div>
                 <div className="bg-tour-cream p-6 rounded-lg shadow-md transform hover:-translate-y-1 transition-transform">
@@ -84,8 +81,6 @@ const AboutSection = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default AboutSection;
