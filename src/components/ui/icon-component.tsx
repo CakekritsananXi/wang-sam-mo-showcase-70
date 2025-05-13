@@ -43,15 +43,18 @@ export const IconComponent = React.memo(({
   fallback,
   ...props
 }: IconComponentProps) => {
+  // Convert size to number if it's a string
+  const iconSize = typeof size === 'string' ? parseInt(size, 10) : size;
+  
   // If the icon exists in the available icons, use it directly
   if (icons[name]) {
     const Icon = icons[name];
-    return <Icon size={size} {...props} />;
+    return <Icon size={iconSize} {...props} />;
   }
   
   // Icon not found
   console.error(`Icon "${name}" not found in lucide-react icons`);
-  return fallback || <IconError size={size} />;
+  return fallback || <IconError size={iconSize} />;
 });
 
 IconComponent.displayName = 'IconComponent';

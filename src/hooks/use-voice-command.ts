@@ -1,6 +1,56 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 
+// Add TypeScript declarations for the Web Speech API
+interface SpeechRecognitionEvent extends Event {
+  results: SpeechRecognitionResultList;
+  resultIndex: number;
+  error: SpeechRecognitionError;
+}
+
+interface SpeechRecognitionError extends Event {
+  error: string;
+  message: string;
+}
+
+interface SpeechRecognitionResultList {
+  length: number;
+  item(index: number): SpeechRecognitionResult;
+  [index: number]: SpeechRecognitionResult;
+}
+
+interface SpeechRecognitionResult {
+  length: number;
+  item(index: number): SpeechRecognitionAlternative;
+  [index: number]: SpeechRecognitionAlternative;
+  isFinal: boolean;
+}
+
+interface SpeechRecognitionAlternative {
+  transcript: string;
+  confidence: number;
+}
+
+interface SpeechRecognition extends EventTarget {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  start(): void;
+  stop(): void;
+  abort(): void;
+  onresult: (event: SpeechRecognitionEvent) => void;
+  onerror: (event: SpeechRecognitionError) => void;
+  onend: () => void;
+}
+
+// Extend the Window interface to include SpeechRecognition
+declare global {
+  interface Window {
+    SpeechRecognition?: new () => SpeechRecognition;
+    webkitSpeechRecognition?: new () => SpeechRecognition;
+  }
+}
+
 interface VoiceCommandOptions {
   commands?: Record<string, () => void>;
   enabled?: boolean;
@@ -32,7 +82,7 @@ export function useVoiceCommand({
   const [isEnabled, setIsEnabled] = useState<boolean>(enabled);
   const [error, setError] = useState<string | null>(null);
   
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
 
   // Initialize speech recognition
   useEffect(() => {
@@ -49,7 +99,7 @@ export function useVoiceCommand({
     recognitionRef.current.interimResults = false;
     recognitionRef.current.lang = language;
 
-    recognitionRef.current.onresult = (event: any) => {
+    recognitionRef.current.onresult = (event: SpeechRecognitionEvent) => {
       const transcript = event.results[event.results.length - 1][0].transcript.trim().toLowerCase();
       setLastCommand(transcript);
 
@@ -61,7 +111,7 @@ export function useVoiceCommand({
       });
     };
 
-    recognitionRef.current.onerror = (event: any) => {
+    recognitionRef.current.onerror = (event: SpeechRecognitionError) => {
       setError(`Speech recognition error: ${event.error}`);
       setIsListening(false);
     };
@@ -71,7 +121,7 @@ export function useVoiceCommand({
       // Auto-restart if still enabled
       if (isEnabled) {
         try {
-          recognitionRef.current.start();
+          recognitionRef.current?.start();
           setIsListening(true);
           setError(null);
         } catch (e) {
