@@ -1,11 +1,12 @@
 
 import React from 'react';
 import { useSupabaseStatus } from '@/hooks/use-supabase-status';
-import { AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
+import { AlertCircle, CheckCircle, Loader2, RefreshCcw } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Button } from "@/components/ui/button";
 
 export const SupabaseStatus: React.FC = () => {
-  const { status, error } = useSupabaseStatus();
+  const { status, error, reconnect } = useSupabaseStatus();
 
   if (status === 'connecting') {
     return (
@@ -32,13 +33,24 @@ export const SupabaseStatus: React.FC = () => {
           <TooltipTrigger asChild>
             <div className="flex items-center space-x-2 text-red-500 bg-white/80 backdrop-blur-sm px-3 py-2 rounded-lg shadow-sm">
               <AlertCircle className="h-4 w-4" />
-              <span className="text-sm">
-                เกิดข้อผิดพลาดในการเชื่อมต่อ
-              </span>
+              <span className="text-sm">เกิดข้อผิดพลาดในการเชื่อมต่อ</span>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={(e) => {
+                  e.preventDefault();
+                  reconnect();
+                }}
+                className="h-5 w-5 rounded-full p-0 ml-1"
+              >
+                <RefreshCcw className="h-3 w-3" />
+                <span className="sr-only">ลองเชื่อมต่อใหม่</span>
+              </Button>
             </div>
           </TooltipTrigger>
           <TooltipContent>
             <p>เกิดข้อผิดพลาดในการเชื่อมต่อฐานข้อมูล{error ? `: ${error}` : ''}</p>
+            <p className="text-xs mt-1">คลิกที่ไอคอนรีเฟรชเพื่อลองเชื่อมต่อใหม่</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
