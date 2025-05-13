@@ -14,26 +14,19 @@ export function useSupabaseStatus() {
       try {
         // First try a simple query to test connection
         const { data, error } = await supabase
-          .from('contact_submissions')
+          .from('lovable_dev_prompts')
           .select('count(*)', { count: 'exact', head: true });
         
         if (error) {
-          // If we get an error with contact_submissions table, try a different table
-          const fallbackCheck = await supabase
-            .from('lovable_dev_prompts')
-            .select('count(*)', { count: 'exact', head: true });
-            
-          if (fallbackCheck.error) {
-            console.error('Supabase connection error:', fallbackCheck.error);
-            setStatus('error');
-            setError(fallbackCheck.error.message);
-            toast({
-              variant: 'destructive',
-              title: 'Database Connection Error',
-              description: 'Could not connect to the database. Please try again later.',
-            });
-            return;
-          }
+          console.error('Supabase connection error:', error);
+          setStatus('error');
+          setError(error.message);
+          toast({
+            variant: 'destructive',
+            title: 'Database Connection Error',
+            description: 'Could not connect to the database. Please try again later.',
+          });
+          return;
         }
 
         setStatus('connected');

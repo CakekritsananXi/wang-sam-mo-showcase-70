@@ -33,7 +33,7 @@ const ContactForm = () => {
     try {
       // Store contact form submission in Supabase
       const { error } = await supabase
-        .from('contact_submissions')
+        .from('contact_submissions' as any) // Type assertion to overcome type limitation
         .insert([{
           name: formData.name,
           email: formData.email,
