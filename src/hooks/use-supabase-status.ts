@@ -12,21 +12,28 @@ export function useSupabaseStatus() {
   useEffect(() => {
     async function checkConnection() {
       try {
-        // Simple query to test connection
+        // First try a simple query to test connection
         const { data, error } = await supabase
-          .from('lovable_dev_prompts')
+          .from('contact_submissions')
           .select('count(*)', { count: 'exact', head: true });
         
         if (error) {
-          console.error('Supabase connection error:', error);
-          setStatus('error');
-          setError(error.message);
-          toast({
-            variant: 'destructive',
-            title: 'Database Connection Error',
-            description: 'Could not connect to the database. Please try again later.',
-          });
-          return;
+          // If we get an error with contact_submissions table, try a different table
+          const fallbackCheck = await supabase
+            .from('lovable_dev_prompts')
+            .select('count(*)', { count: 'exact', head: true });
+            
+          if (fallbackCheck.error) {
+            console.error('Supabase connection error:', fallbackCheck.error);
+            setStatus('error');
+            setError(fallbackCheck.error.message);
+            toast({
+              variant: 'destructive',
+              title: 'Database Connection Error',
+              description: 'Could not connect to the database. Please try again later.',
+            });
+            return;
+          }
         }
 
         setStatus('connected');
@@ -44,6 +51,12 @@ export function useSupabaseStatus() {
     }
 
     checkConnection();
+
+    // Set up interval to periodically check connection (every 60 seconds)
+    const intervalId = setInterval(checkConnection, 60000);
+
+    // Clear interval on component unmount
+    return () => clearInterval(intervalId);
   }, []);
 
   return { status, error, isConnected: status === 'connected' };

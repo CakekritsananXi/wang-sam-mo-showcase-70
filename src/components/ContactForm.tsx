@@ -32,15 +32,15 @@ const ContactForm = () => {
     
     try {
       // Store contact form submission in Supabase
-      const { error } = await supabase.from('contact_submissions').insert([
-        {
+      const { error } = await supabase
+        .from('contact_submissions')
+        .insert([{
           name: formData.name,
           email: formData.email,
           subject: formData.subject,
           message: formData.message,
           status: 'new'
-        }
-      ]);
+        }]);
       
       if (error) {
         console.error('Error submitting contact form:', error);
