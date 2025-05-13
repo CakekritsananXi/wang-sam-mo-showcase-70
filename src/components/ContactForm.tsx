@@ -3,7 +3,8 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner";
+import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -25,23 +26,55 @@ const ContactForm = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate form submission
-    setTimeout(() => {
-      toast.success("ส่งข้อความเรียบร้อยแล้ว เราจะติดต่อกลับโดยเร็วที่สุด", {
+    try {
+      // Store contact form submission in Supabase
+      const { error } = await supabase.from('contact_submissions').insert([
+        {
+          name: formData.name,
+          email: formData.email,
+          subject: formData.subject,
+          message: formData.message,
+          status: 'new'
+        }
+      ]);
+      
+      if (error) {
+        console.error('Error submitting contact form:', error);
+        toast({
+          variant: 'destructive',
+          title: 'ส่งข้อความไม่สำเร็จ',
+          description: 'เกิดข้อผิดพลาดในการส่งข้อความ กรุณาลองใหม่อีกครั้ง',
+        });
+        setIsSubmitting(false);
+        return;
+      }
+      
+      toast({
+        title: "ส่งข้อความเรียบร้อยแล้ว",
+        description: "เราจะติดต่อกลับโดยเร็วที่สุด",
         duration: 5000,
       });
+      
       setFormData({
         name: "",
         email: "",
         subject: "",
         message: "",
       });
+    } catch (err) {
+      console.error('Unexpected error submitting form:', err);
+      toast({
+        variant: 'destructive',
+        title: 'เกิดข้อผิดพลาด',
+        description: 'ไม่สามารถส่งข้อความได้ในขณะนี้ กรุณาลองใหม่ภายหลัง',
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 1500);
+    }
   };
 
   return (

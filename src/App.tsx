@@ -10,6 +10,7 @@ import Gallery from "./pages/Gallery";
 import Team from "./pages/Team";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
+import { SupabaseStatus } from "./components/SupabaseStatus";
 
 const queryClient = new QueryClient();
 
@@ -18,6 +19,9 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
+      <div className="fixed bottom-4 left-4 z-50">
+        <SupabaseStatus />
+      </div>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />

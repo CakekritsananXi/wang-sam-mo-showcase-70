@@ -1,0 +1,50 @@
+
+import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from '@/hooks/use-toast';
+
+type ConnectionStatus = 'connecting' | 'connected' | 'error';
+
+export function useSupabaseStatus() {
+  const [status, setStatus] = useState<ConnectionStatus>('connecting');
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function checkConnection() {
+      try {
+        // Simple query to test connection
+        const { data, error } = await supabase
+          .from('lovable_dev_prompts')
+          .select('count(*)', { count: 'exact', head: true });
+        
+        if (error) {
+          console.error('Supabase connection error:', error);
+          setStatus('error');
+          setError(error.message);
+          toast({
+            variant: 'destructive',
+            title: 'Database Connection Error',
+            description: 'Could not connect to the database. Please try again later.',
+          });
+          return;
+        }
+
+        setStatus('connected');
+        setError(null);
+      } catch (err) {
+        console.error('Unexpected error checking Supabase connection:', err);
+        setStatus('error');
+        setError(err instanceof Error ? err.message : 'Unknown error');
+        toast({
+          variant: 'destructive',
+          title: 'Connection Error',
+          description: 'An unexpected error occurred while connecting to Supabase.',
+        });
+      }
+    }
+
+    checkConnection();
+  }, []);
+
+  return { status, error, isConnected: status === 'connected' };
+}
