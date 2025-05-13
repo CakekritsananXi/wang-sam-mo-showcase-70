@@ -1,73 +1,182 @@
-# Welcome to your Lovable project
 
-## Project info
+# ที่นี่วังสามหมอ (Wang Sam Mo Here)
 
-**URL**: https://lovable.dev/projects/b4c7d31e-6f48-473b-adf1-2957254676b8
+A web application showcasing stories, projects, gallery, and information about the Wang Sam Mo community in Udon Thani province, Thailand.
 
-## How can I edit this code?
+## Table of Contents
 
-There are several ways of editing your application.
+- [Overview](#overview)
+- [Features](#features)
+- [Technologies](#technologies)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Environment Variables](#environment-variables)
+- [Development](#development)
+- [Project Structure](#project-structure)
+- [Database](#database)
+- [Deployment](#deployment)
+- [Contributing](#contributing)
+- [License](#license)
 
-**Use Lovable**
+## Overview
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/b4c7d31e-6f48-473b-adf1-2957254676b8) and start prompting.
+This web application serves as a digital platform for the Wang Sam Mo community in Udon Thani, Thailand. It showcases local projects, a photo gallery, team information, and provides a contact channel for visitors.
 
-Changes made via Lovable will be committed automatically to this repo.
+## Features
 
-**Use your preferred IDE**
+- **Home**: Introduction to Wang Sam Mo with key statistics
+- **Projects**: Showcase of community initiatives and projects
+- **Gallery**: Photo collection with category filtering
+- **Team**: Information about community leaders and contributors
+- **Contact**: Form for visitors to get in touch
+- **Supabase Integration**: Real-time database connection with status monitoring
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## Technologies
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- **Frontend**:
+  - [React](https://reactjs.org/) - UI library
+  - [TypeScript](https://www.typescriptlang.org/) - Type-safe JavaScript
+  - [Vite](https://vitejs.dev/) - Build tool and development server
+  - [React Router DOM](https://reactrouter.com/) - Client-side routing
+  - [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
+  - [shadcn/ui](https://ui.shadcn.com/) - UI component library
 
-Follow these steps:
+- **Backend**:
+  - [Supabase](https://supabase.io/) - Backend-as-a-Service including:
+    - PostgreSQL database
+    - Authentication
+    - Storage
+  - [Tanstack Query](https://tanstack.com/query/) - Data fetching and state management
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## Getting Started
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### Prerequisites
 
-# Step 3: Install the necessary dependencies.
-npm i
+- [Node.js](https://nodejs.org/) (v18 or later)
+- npm or [Bun](https://bun.sh/) package manager
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd <project-directory>
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   # or with Bun
+   bun install
+   ```
+
+3. Set up environment variables (see [Environment Variables](#environment-variables) section)
+
+4. Start the development server:
+   ```bash
+   npm run dev
+   # or with Bun
+   bun run dev
+   ```
+
+5. Open your browser and visit `http://localhost:8080`
+
+### Environment Variables
+
+Create or modify `.env` file in the root directory with the following variables:
+
+```
+NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+VITE_SUPABASE_URL=your-supabase-url
+VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
 ```
 
-**Edit a file directly in GitHub**
+## Development
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+- **Development server**:
+  ```bash
+  npm run dev
+  ```
 
-**Use GitHub Codespaces**
+- **Build for production**:
+  ```bash
+  npm run build
+  ```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+- **Preview production build**:
+  ```bash
+  npm run preview
+  ```
 
-## What technologies are used for this project?
+See [scripts.md](./scripts.md) for a complete list of available scripts.
 
-This project is built with:
+## Project Structure
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+The project follows a feature-based structure:
 
-## How can I deploy this project?
+```
+src/
+├── components/       # Reusable UI components
+├── hooks/           # Custom React hooks
+├── integrations/    # External service integrations (Supabase)
+├── lib/            # Utility functions and helpers
+├── pages/          # Page components (routes)
+└── App.tsx         # Main application component and routing
+```
 
-Simply open [Lovable](https://lovable.dev/projects/b4c7d31e-6f48-473b-adf1-2957254676b8) and click on Share -> Publish.
+For a detailed breakdown of all files, see [filesExplainer.md](./filesExplainer.md).
 
-## Can I connect a custom domain to my Lovable project?
+## Database
 
-Yes, you can!
+The application uses Supabase as its backend service. The database includes tables for:
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+- Contact submissions
+- User profiles
+- Gallery images
+- Project information
+- Team members
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+Connection status is monitored and displayed via the `useSupabaseStatus` hook.
+
+## Deployment
+
+The application can be deployed to any static hosting service:
+
+1. Build the application:
+   ```bash
+   npm run build
+   ```
+
+2. Deploy the contents of the `dist` directory to your hosting provider.
+
+## Contributing
+
+We welcome contributions to improve the application!
+
+1. Fork the repository
+2. Create a feature branch:
+   ```bash
+   git checkout -b feature/amazing-feature
+   ```
+3. Commit your changes:
+   ```bash
+   git commit -m 'Add some amazing feature'
+   ```
+4. Push to your branch:
+   ```bash
+   git push origin feature/amazing-feature
+   ```
+5. Open a Pull Request
+
+### Coding Standards
+
+- Follow the existing code style and patterns
+- Write descriptive commit messages
+- Update documentation as needed
+- Add tests for new features when applicable
+
+## License
+
+This project is licensed under the MIT License.
