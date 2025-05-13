@@ -3,8 +3,9 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://bdcujwhtpnhneaxzgmhe.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJkY3Vqd2h0cG5obmVheHpnbWhlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYzODE0ODcsImV4cCI6MjA2MTk1NzQ4N30.Y89-IovaZAFSOUYILhGKDE7-p42C2tzXlZ_N3L4jlmU";
+// In Vite, environment variables are accessed using import.meta.env instead of process.env
+const SUPABASE_URL = import.meta.env.NEXT_PUBLIC_SUPABASE_URL || "https://bdcujwhtpnhneaxzgmhe.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = import.meta.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJkY3Vqd2h0cG5obmVheHpnbWhlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYzODE0ODcsImV4cCI6MjA2MTk1NzQ4N30.Y89-IovaZAFSOUYILhGKDE7-p42C2tzXlZ_N3L4jlmU";
 
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
